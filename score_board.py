@@ -12,20 +12,25 @@ class ScoreBoard(Turtle):
         self.hideturtle()
         self.pu()
         self.goto(x= 0, y= 280)
-        self.update_score_board()
+        with open("data.txt", mode="r") as data:
+            self.highscore = int(data.read())
+        self.update_scoreboard()
 
-    def update_score_board(self):
-        self.write(arg= f"Score: {self.score}", move= True,
-                   align= ALIGNMENT, font= FONT)
+    def update_scoreboard(self):
+        self.clear()
+        self.write(arg= f"Score: {self.score} High Score: {self.highscore}", align= ALIGNMENT, font= FONT)
 
-    def game_over(self):
-        self.goto(0,0)
-        self.write(arg= "Game over",
-                   move= True, align= ALIGNMENT,
-                   font= GAME_OVER_FONT)
+    def reset(self):
+        if self.score > self.highscore:
+            self.highscore = self.score
+            with open("data.txt", mode="w") as data:
+                data.write(f"{self.score}")
+            self.score = 0
+        else:
+            self.score = 0
+        self.update_scoreboard()
 
     def increase_score(self):
-        self.clear()
         self.score += 1
         self.goto(x=0, y=280)
-        self.update_score_board()
+        self.update_scoreboard()
